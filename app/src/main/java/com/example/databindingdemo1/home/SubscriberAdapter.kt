@@ -8,13 +8,13 @@ import com.example.databindingdemo1.R
 import com.example.databindingdemo1.db.Subscriber
 import kotlinx.android.synthetic.main.subscriber_item_layout.view.*
 
-class SubscriberAdapter :  RecyclerView.Adapter<SubscriberViewHolder>(){
+class SubscriberAdapter(val viewModel: HomeViewModel) :  RecyclerView.Adapter<SubscriberViewHolder>(){
 
     private var subscriberList = mutableListOf<Subscriber>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SubscriberViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val view = inflater.inflate(R.layout.subscriber_item_layout,parent,false)
-        return SubscriberViewHolder(view)
+        return SubscriberViewHolder(view,viewModel)
     }
 
     override fun onBindViewHolder(holder: SubscriberViewHolder, position: Int) {
@@ -33,12 +33,16 @@ class SubscriberAdapter :  RecyclerView.Adapter<SubscriberViewHolder>(){
     }
 }
 
-class SubscriberViewHolder(val view: View) : RecyclerView.ViewHolder(view){
+class SubscriberViewHolder(val view: View, val viewModel: HomeViewModel?) : RecyclerView.ViewHolder(view){
 
     fun bind(subscriber: Subscriber){
         with(view){
             subscriberNameTextView.text = subscriber.name
             subscriberEmailTextView.text = subscriber.email
+            subscriberCardContainer.setOnClickListener {
+                viewModel?.onItemClicked(subscriber)
+            }
+
         }
     }
 }

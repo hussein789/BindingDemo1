@@ -1,19 +1,25 @@
 package com.example.databindingdemo1.home
 
+import android.content.Intent
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.databindingdemo1.R
 import com.example.databindingdemo1.db.Subscriber
 import com.example.databindingdemo1.db.SubscriberDatabase
 import com.example.databindingdemo1.db.SubscriberRepository
+import com.example.databindingdemo1.subscriber_details.SubscriberData
+import com.example.databindingdemo1.subscriber_details.SubscriberDetailsActivity
+import com.example.databindingdemo1.subscriber_details.SubscriberDetailsFragment
 import kotlinx.android.synthetic.main.home_fragment.*
 
 class HomeFragment : Fragment() {
@@ -21,7 +27,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var viewModel: HomeViewModel
     private lateinit var factory: SubscriberViewModelFactory
-    private var adapter = SubscriberAdapter()
+    private lateinit var adapter:SubscriberAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,6 +59,16 @@ class HomeFragment : Fragment() {
         viewModel.clearEmail.observe(viewLifecycleOwner, Observer { clear ->
             clear?.let { emailEditText.setText("") }
         })
+        viewModel.navigateToSubscriberDetails.observe(viewLifecycleOwner, Observer { subscriber ->
+            subscriber?.let { navigateToSubscriber(it) }
+        })
+    }
+
+    private fun navigateToSubscriber(subscriber: Subscriber) {
+        val updatedSubscriber = SubscriberData(subscriber.id,subscriber.name,subscriber.email)
+        val intent = Intent(requireActivity(),SubscriberDetailsActivity::class.java)
+        intent.putExtra(SubscriberDetailsFragment.SUBSCRIBER_KEY,updatedSubscriber)
+        startActivity(intent)
     }
 
     private fun updateSubscriberList(list: List<Subscriber>) {
@@ -74,6 +90,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun initRecyclerView() {
+        adapter = SubscriberAdapter(viewModel)
         subscriberListRecyclerView.layoutManager = LinearLayoutManager(requireActivity())
         subscriberListRecyclerView.adapter = adapter
     }

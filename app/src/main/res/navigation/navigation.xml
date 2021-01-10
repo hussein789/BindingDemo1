@@ -13,10 +13,22 @@
         <action
             android:id="@+id/action_homeFragment_to_listSubscreibersFragment"
             app:destination="@id/listSubscreibersFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_subscriberDetailsFragment"
+            app:destination="@id/subscriberDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/listSubscreibersFragment"
         android:name="com.example.databindingdemo1.subscribers.ListSubscreibersFragment"
         android:label="list_subscreibers_fragment"
-        tools:layout="@layout/list_subscreibers_fragment" />
+        tools:layout="@layout/list_subscreibers_fragment" >
+        <action
+            android:id="@+id/action_listSubscreibersFragment_to_subscriberDetailsFragment"
+            app:destination="@id/subscriberDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/subscriberDetailsFragment"
+        android:name="com.example.databindingdemo1.subscriber_details.SubscriberDetailsFragment"
+        android:label="subscriber_details_fragment"
+        tools:layout="@layout/subscriber_details_fragment" />
 </navigation>

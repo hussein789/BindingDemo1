@@ -12,11 +12,18 @@ abstract class SubscriberItemEpoxy : EpoxyModelWithHolder<SubscriberItemEpoxy.Ho
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     lateinit var subscriber: Subscriber
 
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    lateinit var viewModel:ListSubscreibersViewModel
+
     override fun bind(holder: Holder) {
         super.bind(holder)
         with(holder.view){
             subscriberNameTextView.text = subscriber.name
             subscriberEmailTextView.text = subscriber.email
+            subscriberCardContainer.setOnClickListener {
+                viewModel.onItemClicked(subscriber)
+            }
+
         }
     }
 

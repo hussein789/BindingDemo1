@@ -13,6 +13,7 @@ class HomeViewModel(private val repo: SubscriberRepository) : ViewModel() {
 
     val inputName = MutableLiveData<String>()
     val inputEmail = MutableLiveData<String>()
+    val navigateToSubscriberDetails = MutableLiveData<Subscriber>()
 
     val saveOrUpdateBtnText = MutableLiveData<String>()
     val clearAllOrDeleteText = MutableLiveData<String>()
@@ -68,6 +69,10 @@ class HomeViewModel(private val repo: SubscriberRepository) : ViewModel() {
                 inputEmail.value = it.toString()
             }
         }
+    }
+
+    fun onItemClicked(subscriber: Subscriber) {
+        navigateToSubscriberDetails.value = subscriber
     }
 
 

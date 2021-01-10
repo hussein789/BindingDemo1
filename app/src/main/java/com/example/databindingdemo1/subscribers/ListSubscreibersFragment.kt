@@ -1,5 +1,6 @@
 package com.example.databindingdemo1.subscribers
 
+import android.content.Intent
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -12,6 +13,9 @@ import com.example.databindingdemo1.R
 import com.example.databindingdemo1.db.Subscriber
 import com.example.databindingdemo1.db.SubscriberDatabase
 import com.example.databindingdemo1.db.SubscriberRepository
+import com.example.databindingdemo1.subscriber_details.SubscriberData
+import com.example.databindingdemo1.subscriber_details.SubscriberDetailsActivity
+import com.example.databindingdemo1.subscriber_details.SubscriberDetailsFragment
 import kotlinx.android.synthetic.main.list_subscreibers_fragment.*
 
 class ListSubscreibersFragment : Fragment() {
@@ -39,6 +43,16 @@ class ListSubscreibersFragment : Fragment() {
         viewModel.subscribers.observe(viewLifecycleOwner, Observer { list ->
             list?.let { updateSubscriberList(list) }
         })
+        viewModel.navigateToOrderDetails.observe(viewLifecycleOwner, Observer { navigation ->
+            navigation?.let { navigateToOrderDetails(it) }
+        })
+    }
+
+    private fun navigateToOrderDetails(subscriber: Subscriber) {
+        val updatedSubscriber = SubscriberData(subscriber.id,subscriber.name,subscriber.email)
+        val intent = Intent(requireActivity(),SubscriberDetailsActivity::class.java)
+        intent.putExtra(SubscriberDetailsFragment.SUBSCRIBER_KEY,updatedSubscriber)
+        startActivity(intent)
     }
 
     private fun updateSubscriberList(list: List<Subscriber>) {
