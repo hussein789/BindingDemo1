@@ -1,74 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".home.HomeFragment"
-    android:padding="16dp">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <EditText
-        android:id="@+id/nameEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Name"
-        android:textSize="30sp"
-        android:layout_margin="8dp" />
-<EditText
-    android:id="@+id/emailEditText"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:hint="Email"
-    android:textSize="30sp"
-    android:layout_margin="8dp"
-    android:layout_below="@id/nameEditText"/>
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.databindingdemo1.home.HomeViewModel" />
 
-    <LinearLayout
-        android:id="@+id/buttonContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="8dp"
-        android:layout_below="@id/emailEditText">
+    </data>
 
-        <Button
-            android:id="@+id/saveButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Save"
-            android:layout_marginEnd="4dp"/>
-
-        <Button
-            android:id="@+id/clearAllButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Clear All" />
-    </LinearLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/subscriberListRecyclerView"
-        android:layout_margin="8dp"
-        android:layout_below="@id/buttonContainer"
-        android:layout_above="@id/allSubscribersButton"/>
-
-    <include
-        android:id="@+id/noSubscribersLayout"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        layout="@layout/empty_list_layout"
-        android:visibility="gone"
-        android:layout_below="@id/buttonContainer"
-        android:layout_above="@id/allSubscribersButton"/>
+        android:orientation="vertical"
+        tools:context=".home.HomeFragment"
+        android:padding="16dp">
 
-    <Button
-        android:id="@+id/allSubscribersButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Al Subscribers"
-        android:layout_alignParentBottom="true"/>
+        <EditText
+            android:id="@+id/nameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Name"
+            android:text="@={viewModel.inputName}"
+            android:textSize="30sp"
+            android:layout_margin="8dp" />
 
-</RelativeLayout>
+        <EditText
+            android:id="@+id/emailEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@={viewModel.inputEmail}"
+            android:hint="Email"
+            android:textSize="30sp"
+            android:layout_margin="8dp"
+            android:layout_below="@id/nameEditText" />
+
+        <LinearLayout
+            android:id="@+id/buttonContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="8dp"
+            android:layout_below="@id/emailEditText">
+
+            <Button
+                android:id="@+id/saveButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="@{()->viewModel.onSaveClicked()}"
+                android:text="Save"
+                android:layout_marginEnd="4dp" />
+
+            <Button
+                android:id="@+id/clearAllButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Clear All"
+                android:onClick="@{()->viewModel.onClearAllClicked()}"/>
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/subscriberListRecyclerView"
+            android:layout_margin="8dp"
+            android:isVisible="@{viewModel.showMainLayout}"
+            android:layout_below="@id/buttonContainer"
+            android:layout_above="@id/allSubscribersButton" />
+
+        <include
+            android:id="@+id/emptyIncludeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            layout="@layout/empty_list_layout"
+            android:visibility="gone"
+            android:layout_below="@id/buttonContainer"
+            android:layout_above="@id/allSubscribersButton" />
+
+        <Button
+            android:id="@+id/allSubscribersButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Al Subscribers"
+            android:onClick="@{()->viewModel.onAllSubscribersClicked()}"
+            android:layout_alignParentBottom="true" />
+
+    </RelativeLayout>
+</layout>

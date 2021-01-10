@@ -1,25 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".subscribers.ListSubscreibersFragment"
-    android:id="@+id/listContainer">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
 
+        <variable
+            name="viewModel"
+            type="com.example.databindingdemo1.subscribers.ListSubscreibersViewModel" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/subscribersRecyclerView"/>
+    </data>
 
-    <include
-        android:id="@+id/noSubscribersLayout"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        layout="@layout/empty_list_layout"
-        android:visibility="gone"
-        />
+        tools:context=".subscribers.ListSubscreibersFragment"
+        android:id="@+id/listContainer">
 
 
-</RelativeLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/subscribersRecyclerView"
+            android:isVisible="@{viewModel.showMainLayout}"/>
+
+        <include
+            android:id="@+id/emptyIncludeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            layout="@layout/empty_list_layout"
+            android:visibility="gone" />
+
+
+    </RelativeLayout>
+</layout>

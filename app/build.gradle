@@ -23,6 +23,10 @@ android {
         experimental = true
     }
 
+    buildFeatures{
+        dataBinding = true
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -36,10 +40,6 @@ android {
     flavorDimensions "version"
     productFlavors {
         demo {
-            // Assigns this product flavor to the "version" flavor dimension.
-            // If you are using only one dimension, this property is optional,
-            // and the plugin automatically assigns all the module's flavors to
-            // that dimension.
             dimension "version"
             applicationIdSuffix ".demo"
             versionNameSuffix "-demo"

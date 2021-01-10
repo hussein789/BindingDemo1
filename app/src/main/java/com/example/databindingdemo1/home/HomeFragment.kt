@@ -1,26 +1,23 @@
 package com.example.databindingdemo1.home
 
-import android.content.Intent
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.core.widget.doOnTextChanged
+import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.navigation.findNavController
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.databindingdemo1.R
+import com.example.databindingdemo1.databinding.HomeFragmentBinding
 import com.example.databindingdemo1.db.Subscriber
 import com.example.databindingdemo1.db.SubscriberDatabase
 import com.example.databindingdemo1.db.SubscriberRepository
 import com.example.databindingdemo1.subscriber_details.SubscriberData
-import com.example.databindingdemo1.subscriber_details.SubscriberDetailsActivity
 import com.example.databindingdemo1.subscriber_details.SubscriberDetailsFragment
-import kotlinx.android.synthetic.main.home_fragment.*
 
 class HomeFragment : Fragment() {
 
@@ -29,22 +26,25 @@ class HomeFragment : Fragment() {
     private lateinit var factory: SubscriberViewModelFactory
     private lateinit var adapter:SubscriberAdapter
 
+    private lateinit var binding:HomeFragmentBinding
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view =  inflater.inflate(R.layout.home_fragment, container, false)
+        binding = HomeFragmentBinding.inflate(inflater)
         val subscriberDao = SubscriberDatabase.newInstance(requireActivity()).subscriberDAO
         val repo = SubscriberRepository(subscriberDao)
         factory = SubscriberViewModelFactory(repo)
         viewModel = ViewModelProvider(this,factory).get(HomeViewModel::class.java)
-        return view
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = this
+        return binding.root
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initClickedListener()
         initViews()
         observeViewModel()
     }
@@ -53,31 +53,33 @@ class HomeFragment : Fragment() {
         viewModel.subscribers.observe(viewLifecycleOwner, Observer { list ->
             list?.let { updateSubscriberList(it) }
         })
-        viewModel.clearName.observe(viewLifecycleOwner, Observer {clear ->
-            clear?.let { nameEditText.setText("") }
-        })
-        viewModel.clearEmail.observe(viewLifecycleOwner, Observer { clear ->
-            clear?.let { emailEditText.setText("") }
-        })
         viewModel.navigateToSubscriberDetails.observe(viewLifecycleOwner, Observer { subscriber ->
             subscriber?.let { navigateToSubscriber(it) }
         })
+        viewModel.navigateToSubscribersList.observe(viewLifecycleOwner,{
+            it?.let { navigateToSubscribersList(it) }
+        })
         viewModel.showMainLayout.observe(viewLifecycleOwner, Observer { show ->
-            show?.let { handleMainLayout(it) }
+            show?.let {
+                handleEmptyListVisibility(show)
+            }
         })
     }
 
-    private fun handleMainLayout(show: Boolean) {
-        subscriberListRecyclerView.visibility = if(show) View.VISIBLE else View.GONE
-        noSubscribersLayout.visibility = if(show) View.GONE else View.VISIBLE
+    private fun handleEmptyListVisibility(show: Boolean) {
+        binding.emptyIncludeLayout.emptyContainer.isVisible = !show
+    }
 
+    private fun navigateToSubscribersList(navigate: Boolean) {
+        if(navigate){
+            this.findNavController().navigate(R.id.action_homeFragment_to_listSubscreibersFragment)
+        }
     }
 
     private fun navigateToSubscriber(subscriber: Subscriber) {
         val updatedSubscriber = SubscriberData(subscriber.id,subscriber.name,subscriber.email)
-        val intent = Intent(requireActivity(),SubscriberDetailsActivity::class.java)
-        intent.putExtra(SubscriberDetailsFragment.SUBSCRIBER_KEY,updatedSubscriber)
-        startActivity(intent)
+        val bundle = bundleOf(SubscriberDetailsFragment.SUBSCRIBER_KEY to updatedSubscriber)
+        this.findNavController().navigate(R.id.action_homeFragment_to_subscriberDetailsFragment,bundle)
     }
 
     private fun updateSubscriberList(list: List<Subscriber>) {
@@ -85,34 +87,12 @@ class HomeFragment : Fragment() {
     }
 
     private fun initViews() {
-        nameEditText.doOnTextChanged { text, start, before, count ->
-            viewModel.updateName(text)
-        }
-        emailEditText.doOnTextChanged { text, start, before, count ->
-            viewModel.updateEmail(text)
-        }
-        allSubscribersButton.setOnClickListener {
-            it.findNavController().navigate(R.id.action_homeFragment_to_listSubscreibersFragment)
-        }
-
         initRecyclerView()
     }
 
     private fun initRecyclerView() {
         adapter = SubscriberAdapter(viewModel)
-        subscriberListRecyclerView.layoutManager = LinearLayoutManager(requireActivity())
-        subscriberListRecyclerView.adapter = adapter
+        binding.subscriberListRecyclerView.layoutManager = LinearLayoutManager(requireActivity())
+        binding.subscriberListRecyclerView.adapter = adapter
     }
-
-    private fun initClickedListener() {
-        saveButton.setOnClickListener {
-            viewModel.onSaveOrUpdateClicked()
-        }
-
-        clearAllButton.setOnClickListener {
-            viewModel.onClearAllOrDeleteClicked()
-        }
-
-    }
-
 }

@@ -13,11 +13,11 @@ import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import com.example.databindingdemo1.R
+import com.example.databindingdemo1.databinding.SubscriberDetailsFragmentBinding
 import com.example.databindingdemo1.db.Subscriber
 import com.example.databindingdemo1.db.SubscriberDatabase
 import com.example.databindingdemo1.db.SubscriberRepository
 import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.subscriber_details_fragment.*
 
 class SubscriberDetailsFragment : Fragment() {
 
@@ -33,6 +33,7 @@ class SubscriberDetailsFragment : Fragment() {
    }
 
     private lateinit var viewModel: SubscriberDetailsViewModel
+    private lateinit var binding: SubscriberDetailsFragmentBinding
 
 
 
@@ -40,43 +41,23 @@ class SubscriberDetailsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view =  inflater.inflate(R.layout.subscriber_details_fragment, container, false)
+        binding = SubscriberDetailsFragmentBinding.inflate(inflater,container,false)
         val dao = SubscriberDatabase.newInstance(requireActivity()).subscriberDAO
         val repo = SubscriberRepository(dao)
         val factory = SubscriberDetailsViewModelFactory(repo)
         viewModel = ViewModelProvider(this,factory).get(SubscriberDetailsViewModel::class.java)
-        return view
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = this
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val subscriber:SubscriberData? = arguments?.getParcelable(SUBSCRIBER_KEY)
-        nameEditText.setText( subscriber?.name ?: "")
-        emailEditText.setText(subscriber?.email ?: "")
         viewModel.init(subscriber)
-        initClickListeners()
-        initViews()
         observeViewModel()
         Toast.makeText(requireActivity(),"Full Debug Version",Toast.LENGTH_LONG).show()
 
-    }
-
-    private fun initViews() {
-        nameEditText.addTextChangedListener {
-            viewModel.onNameTextChanged(it.toString())
-        }
-        emailEditText.addTextChangedListener {
-            viewModel.onEmailTextChanged(it.toString())
-        }
-    }
-
-    private fun initClickListeners() {
-        updateSubscriberButton.setOnClickListener {
-            viewModel.onUpdateClicked()
-        }
-        deleteSubscriberButton.setOnClickListener {
-            viewModel.onDeleteClicked()
-        }
     }
 
     private fun observeViewModel() {
@@ -89,14 +70,6 @@ class SubscriberDetailsFragment : Fragment() {
         requireActivity().finish()
     }
 
-
-    private fun updateEmail(email: String) {
-        emailEditText.setText(email)
-    }
-
-    private fun updateName(name: String) {
-        nameEditText.setText(name)
-    }
 }
 
 @Parcelize

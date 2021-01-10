@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.databindingdemo1.db.Subscriber
 import com.example.databindingdemo1.db.SubscriberRepository
+import com.example.databindingdemo1.utils.SingleLiveEvent
 import kotlinx.coroutines.launch
 
 class HomeViewModel(private val repo: SubscriberRepository) : ViewModel() {
@@ -15,7 +16,8 @@ class HomeViewModel(private val repo: SubscriberRepository) : ViewModel() {
 
     val inputName = MutableLiveData<String>()
     val inputEmail = MutableLiveData<String>()
-    val navigateToSubscriberDetails = MutableLiveData<Subscriber>()
+    val navigateToSubscriberDetails = SingleLiveEvent<Subscriber>()
+    val navigateToSubscribersList = SingleLiveEvent<Boolean>()
     val showMainLayout = Transformations.map(subscribers){
         it.isNotEmpty()
     }
@@ -28,7 +30,7 @@ class HomeViewModel(private val repo: SubscriberRepository) : ViewModel() {
         clearAllOrDeleteText.value = "Clear All"
     }
 
-    fun onSaveOrUpdateClicked(){
+    fun onSaveClicked(){
         val name = inputName.value ?: ""
         val email = inputEmail.value ?: ""
         if(name.isNotEmpty() && email.isNotEmpty()){
@@ -40,16 +42,14 @@ class HomeViewModel(private val repo: SubscriberRepository) : ViewModel() {
         }
     }
 
-    fun onClearAllOrDeleteClicked(){
+    fun onClearAllClicked(){
         clearAll()
         clearFields()
     }
 
-    val clearName = MutableLiveData<Boolean>()
-    val clearEmail = MutableLiveData<Boolean>()
     private fun clearFields() {
-       clearName.value = true
-        clearEmail.value = true
+        inputName.value = null
+        inputEmail.value = null
     }
 
     fun clearAll(){
@@ -82,6 +82,10 @@ class HomeViewModel(private val repo: SubscriberRepository) : ViewModel() {
 
     fun onItemClicked(subscriber: Subscriber) {
         navigateToSubscriberDetails.value = subscriber
+    }
+
+    fun onAllSubscribersClicked(){
+         navigateToSubscribersList.value = true
     }
 
 

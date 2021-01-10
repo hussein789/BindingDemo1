@@ -15,7 +15,7 @@ class SubscriberListController : EpoxyController() {
     }
 
     override fun buildModels() {
-        subscribers?.let {
+        subscribers.let {
             subscribers.forEachIndexed { index, subscriber ->
                 subscriberItem {
                     id(subscriber.id.toString(),subscriber.name,subscriber.email)

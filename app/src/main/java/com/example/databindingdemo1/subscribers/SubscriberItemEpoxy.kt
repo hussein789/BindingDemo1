@@ -3,6 +3,7 @@ package com.example.databindingdemo1.subscribers
 import android.view.View
 import com.airbnb.epoxy.*
 import com.example.databindingdemo1.R
+import com.example.databindingdemo1.databinding.SubscriberItemLayoutBinding
 import com.example.databindingdemo1.db.Subscriber
 import kotlinx.android.synthetic.main.subscriber_item_layout.view.*
 
@@ -17,7 +18,7 @@ abstract class SubscriberItemEpoxy : EpoxyModelWithHolder<SubscriberItemEpoxy.Ho
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        with(holder.view){
+        with(holder.binding){
             subscriberNameTextView.text = subscriber.name
             subscriberEmailTextView.text = subscriber.email
             subscriberCardContainer.setOnClickListener {
@@ -29,8 +30,10 @@ abstract class SubscriberItemEpoxy : EpoxyModelWithHolder<SubscriberItemEpoxy.Ho
 
     inner class Holder : EpoxyHolder(){
         lateinit var view:View
+        lateinit var binding:SubscriberItemLayoutBinding
         override fun bindView(itemView: View) {
             view = itemView
+            binding = SubscriberItemLayoutBinding.bind(view)
         }
 
     }
