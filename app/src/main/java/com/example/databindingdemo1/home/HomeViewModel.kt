@@ -1,6 +1,7 @@
 package com.example.databindingdemo1.home
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.databindingdemo1.db.Subscriber
@@ -14,6 +15,9 @@ class HomeViewModel(private val repo: SubscriberRepository) : ViewModel() {
     val inputName = MutableLiveData<String>()
     val inputEmail = MutableLiveData<String>()
     val navigateToSubscriberDetails = MutableLiveData<Subscriber>()
+    val showMainLayout = Transformations.map(subscribers){
+        it.isNotEmpty()
+    }
 
     val saveOrUpdateBtnText = MutableLiveData<String>()
     val clearAllOrDeleteText = MutableLiveData<String>()

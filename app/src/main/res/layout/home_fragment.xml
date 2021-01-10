@@ -55,6 +55,15 @@
         android:layout_below="@id/buttonContainer"
         android:layout_above="@id/allSubscribersButton"/>
 
+    <include
+        android:id="@+id/noSubscribersLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        layout="@layout/empty_list_layout"
+        android:visibility="gone"
+        android:layout_below="@id/buttonContainer"
+        android:layout_above="@id/allSubscribersButton"/>
+
     <Button
         android:id="@+id/allSubscribersButton"
         android:layout_width="match_parent"

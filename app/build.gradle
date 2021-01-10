@@ -61,6 +61,18 @@ android {
     kapt {
         correctErrorTypes = true
     }
+    sourceSets {
+        demoDebug {
+            java {
+                srcDirs 'src/demoDebug/java'
+            }
+        }
+        fullDebug {
+            java {
+                srcDirs 'src/fullDebug/java'
+            }
+        }
+    }
 }
 
 

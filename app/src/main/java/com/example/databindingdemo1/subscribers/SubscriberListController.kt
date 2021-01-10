@@ -6,6 +6,7 @@ import com.example.databindingdemo1.db.Subscriber
 class SubscriberListController : EpoxyController() {
 
     private  var subscribers = mutableListOf<Subscriber>()
+    lateinit var viewModel:ListSubscreibersViewModel
 
     fun setData(subscribeList:List<Subscriber>){
         subscribers.clear()
@@ -17,8 +18,9 @@ class SubscriberListController : EpoxyController() {
         subscribers?.let {
             subscribers.forEachIndexed { index, subscriber ->
                 subscriberItem {
-                    id(index)
+                    id(subscriber.id.toString(),subscriber.name,subscriber.email)
                     subscriber(subscriber)
+                    viewModel(viewModel)
                 }
             }
         }

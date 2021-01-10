@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.list_subscreibers_fragment.*
 class ListSubscreibersFragment : Fragment() {
 
     private lateinit var viewModel: ListSubscreibersViewModel
-    var controller = SubscriberListController()
+    lateinit var controller:SubscriberListController
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -46,6 +46,16 @@ class ListSubscreibersFragment : Fragment() {
         viewModel.navigateToOrderDetails.observe(viewLifecycleOwner, Observer { navigation ->
             navigation?.let { navigateToOrderDetails(it) }
         })
+        viewModel.showMainLayout.observe(viewLifecycleOwner, Observer { show ->
+            show?.let {
+                handleMainLayout(it)
+            }
+        })
+    }
+
+    private fun handleMainLayout(show: Boolean) {
+        subscribersRecyclerView.visibility = if (show) View.VISIBLE else View.GONE
+        noSubscribersLayout.visibility = if (show) View.GONE else View.VISIBLE
     }
 
     private fun navigateToOrderDetails(subscriber: Subscriber) {
@@ -60,6 +70,8 @@ class ListSubscreibersFragment : Fragment() {
     }
 
     private fun initViews() {
+        controller = SubscriberListController()
+        controller.viewModel = viewModel
         subscribersRecyclerView.layoutManager = LinearLayoutManager(requireActivity())
         subscribersRecyclerView.adapter = controller.adapter
     }

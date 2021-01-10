@@ -62,6 +62,15 @@ class HomeFragment : Fragment() {
         viewModel.navigateToSubscriberDetails.observe(viewLifecycleOwner, Observer { subscriber ->
             subscriber?.let { navigateToSubscriber(it) }
         })
+        viewModel.showMainLayout.observe(viewLifecycleOwner, Observer { show ->
+            show?.let { handleMainLayout(it) }
+        })
+    }
+
+    private fun handleMainLayout(show: Boolean) {
+        subscriberListRecyclerView.visibility = if(show) View.VISIBLE else View.GONE
+        noSubscribersLayout.visibility = if(show) View.GONE else View.VISIBLE
+
     }
 
     private fun navigateToSubscriber(subscriber: Subscriber) {

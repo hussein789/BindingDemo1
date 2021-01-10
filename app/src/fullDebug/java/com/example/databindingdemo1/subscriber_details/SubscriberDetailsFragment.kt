@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
@@ -56,7 +57,7 @@ class SubscriberDetailsFragment : Fragment() {
         initClickListeners()
         initViews()
         observeViewModel()
-
+        Toast.makeText(requireActivity(),"Full Debug Version",Toast.LENGTH_LONG).show()
 
     }
 
