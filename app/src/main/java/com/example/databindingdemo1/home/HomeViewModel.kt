@@ -1,5 +1,6 @@
 package com.example.databindingdemo1.home
 
+import android.util.Patterns
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
@@ -30,9 +31,13 @@ class HomeViewModel(private val repo: SubscriberRepository) : ViewModel() {
     fun onSaveOrUpdateClicked(){
         val name = inputName.value ?: ""
         val email = inputEmail.value ?: ""
-        val subscriber = Subscriber(0,name,email)
-        insert(subscriber)
-        clearFields()
+        if(name.isNotEmpty() && email.isNotEmpty()){
+            if(Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                val subscriber = Subscriber(0,name,email)
+                insert(subscriber)
+                clearFields()
+            }
+        }
     }
 
     fun onClearAllOrDeleteClicked(){
