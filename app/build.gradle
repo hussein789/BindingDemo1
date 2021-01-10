@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'androidx.navigation.safeargs'
+    id 'kotlin-android-extensions'
 }
 
 android {
@@ -24,6 +25,27 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+            applicationIdSuffix ".debug"
+            debuggable true
+        }
+    }
+    flavorDimensions "version"
+    productFlavors {
+        demo {
+            // Assigns this product flavor to the "version" flavor dimension.
+            // If you are using only one dimension, this property is optional,
+            // and the plugin automatically assigns all the module's flavors to
+            // that dimension.
+            dimension "version"
+            applicationIdSuffix ".demo"
+            versionNameSuffix "-demo"
+        }
+        full {
+            dimension "version"
+            applicationIdSuffix ".full"
+            versionNameSuffix "-full"
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -32,13 +54,19 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+    kapt {
+        correctErrorTypes = true
+    }
 }
+
 
 dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     def room_version = "2.2.6"
     def lifecycle_version = "2.2.0"
     def nav_version = "2.3.2"
+    def epoxyVersion = "4.3.1"
 
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -71,6 +99,11 @@ dependencies {
     // Kotlin
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+
+    //Epoxy
+    implementation 'com.airbnb.android:epoxy:4.1.0'
+    kapt 'com.airbnb.android:epoxy-processor:4.1.0'
+    implementation 'com.airbnb.android:epoxy-databinding:4.0.0'
 
     // optional - Test helpers
     testImplementation "androidx.room:room-testing:$room_version"
