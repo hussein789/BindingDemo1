@@ -48,7 +48,6 @@ class SubscriberDetailsFragment : Fragment() {
         viewModel.init(subscriber)
         observeViewModel()
 
-        Toast.makeText(requireActivity(),"Debug demo ",Toast.LENGTH_LONG).show()
     }
 
 

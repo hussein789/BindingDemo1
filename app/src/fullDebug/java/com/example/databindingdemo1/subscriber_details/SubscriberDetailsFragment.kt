@@ -56,7 +56,6 @@ class SubscriberDetailsFragment : Fragment() {
         val subscriber:SubscriberData? = arguments?.getParcelable(SUBSCRIBER_KEY)
         viewModel.init(subscriber)
         observeViewModel()
-        Toast.makeText(requireActivity(),"Full Debug Version",Toast.LENGTH_LONG).show()
 
     }
 
