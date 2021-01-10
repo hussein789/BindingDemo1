@@ -12,6 +12,7 @@ import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.example.databindingdemo1.R
 import com.example.databindingdemo1.db.Subscriber
 import com.example.databindingdemo1.db.SubscriberDatabase
@@ -86,7 +87,7 @@ class SubscriberDetailsFragment : Fragment() {
     }
 
     private fun finishActivity() {
-        requireActivity().finish()
+        this.findNavController().navigateUp()
     }
 
 

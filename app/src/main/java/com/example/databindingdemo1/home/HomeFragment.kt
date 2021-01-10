@@ -1,6 +1,5 @@
 package com.example.databindingdemo1.home
 
-import android.content.Intent
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -18,7 +17,6 @@ import com.example.databindingdemo1.db.Subscriber
 import com.example.databindingdemo1.db.SubscriberDatabase
 import com.example.databindingdemo1.db.SubscriberRepository
 import com.example.databindingdemo1.subscriber_details.SubscriberData
-import com.example.databindingdemo1.subscriber_details.SubscriberDetailsActivity
 import com.example.databindingdemo1.subscriber_details.SubscriberDetailsFragment
 import kotlinx.android.synthetic.main.home_fragment.*
 
@@ -75,9 +73,8 @@ class HomeFragment : Fragment() {
 
     private fun navigateToSubscriber(subscriber: Subscriber) {
         val updatedSubscriber = SubscriberData(subscriber.id,subscriber.name,subscriber.email)
-        val intent = Intent(requireActivity(),SubscriberDetailsActivity::class.java)
-        intent.putExtra(SubscriberDetailsFragment.SUBSCRIBER_KEY,updatedSubscriber)
-        startActivity(intent)
+        val bundle = bundleOf(SubscriberDetailsFragment.SUBSCRIBER_KEY to updatedSubscriber)
+        this.findNavController().navigate(R.id.action_homeFragment_to_subscriberDetailsFragment,bundle)
     }
 
     private fun updateSubscriberList(list: List<Subscriber>) {

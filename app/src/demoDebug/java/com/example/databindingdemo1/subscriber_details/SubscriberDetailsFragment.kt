@@ -23,13 +23,6 @@ class SubscriberDetailsFragment : Fragment() {
 
    companion object{
         const val SUBSCRIBER_KEY = "SUBSCRIBER_KEY"
-       fun newInstance(subscriberData: SubscriberData?): SubscriberDetailsFragment{
-           val args = bundleOf(SUBSCRIBER_KEY to subscriberData)
-
-           val fragment = SubscriberDetailsFragment()
-           fragment.arguments = args
-           return fragment
-       }
    }
 
     private lateinit var viewModel: SubscriberDetailsViewModel
@@ -87,7 +80,7 @@ class SubscriberDetailsFragment : Fragment() {
     }
 
     private fun finishActivity() {
-        requireActivity().finish()
+        this.findNavController().navigateUp()
     }
 
 

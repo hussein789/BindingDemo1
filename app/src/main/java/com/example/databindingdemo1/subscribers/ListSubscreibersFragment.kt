@@ -1,20 +1,20 @@
 package com.example.databindingdemo1.subscribers
 
-import android.content.Intent
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.databindingdemo1.R
 import com.example.databindingdemo1.db.Subscriber
 import com.example.databindingdemo1.db.SubscriberDatabase
 import com.example.databindingdemo1.db.SubscriberRepository
 import com.example.databindingdemo1.subscriber_details.SubscriberData
-import com.example.databindingdemo1.subscriber_details.SubscriberDetailsActivity
 import com.example.databindingdemo1.subscriber_details.SubscriberDetailsFragment
 import kotlinx.android.synthetic.main.list_subscreibers_fragment.*
 
@@ -60,9 +60,8 @@ class ListSubscreibersFragment : Fragment() {
 
     private fun navigateToOrderDetails(subscriber: Subscriber) {
         val updatedSubscriber = SubscriberData(subscriber.id,subscriber.name,subscriber.email)
-        val intent = Intent(requireActivity(),SubscriberDetailsActivity::class.java)
-        intent.putExtra(SubscriberDetailsFragment.SUBSCRIBER_KEY,updatedSubscriber)
-        startActivity(intent)
+        val bundle = bundleOf(SubscriberDetailsFragment.SUBSCRIBER_KEY to updatedSubscriber)
+        this.findNavController().navigate(R.id.action_homeFragment_to_subscriberDetailsFragment,bundle)
     }
 
     private fun updateSubscriberList(list: List<Subscriber>) {

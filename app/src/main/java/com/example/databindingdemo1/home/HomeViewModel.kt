@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.databindingdemo1.db.Subscriber
 import com.example.databindingdemo1.db.SubscriberRepository
+import com.example.databindingdemo1.utils.SingleLiveEvent
 import kotlinx.coroutines.launch
 
 class HomeViewModel(private val repo: SubscriberRepository) : ViewModel() {
@@ -15,7 +16,7 @@ class HomeViewModel(private val repo: SubscriberRepository) : ViewModel() {
 
     val inputName = MutableLiveData<String>()
     val inputEmail = MutableLiveData<String>()
-    val navigateToSubscriberDetails = MutableLiveData<Subscriber>()
+    val navigateToSubscriberDetails = SingleLiveEvent<Subscriber>()
     val showMainLayout = Transformations.map(subscribers){
         it.isNotEmpty()
     }
